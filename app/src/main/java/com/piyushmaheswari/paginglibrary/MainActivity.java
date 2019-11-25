@@ -1,6 +1,12 @@
 package com.piyushmaheswari.paginglibrary;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
@@ -9,6 +15,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    //getting recyclerview
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,21 +24,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Call<StackApiResponse> call=
-                RetrofitClient.getInstance()
-                .getApi()
-                .getAnswers(1,50,"stackoverflow");
+        //setting up recyclerview
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
 
-        call.enqueue(new Callback<StackApiResponse>() {
+        //getting our ItemViewModel
+        ItemViewModel itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+
+        //creating the Adapter
+        final ItemViewAdapter adapter = new ItemViewAdapter(this);
+
+
+        //observing the itemPagedList from view model
+        itemViewModel.itemPagedList.observe(this, new Observer<PagedList<Item>>() {
             @Override
-            public void onResponse(Call<StackApiResponse> call, Response<StackApiResponse> response) {
-                StackApiResponse stackApiResponse=response.body();
-            }
+            public void onChanged(@Nullable PagedList<Item> items) {
 
-            @Override
-            public void onFailure(Call<StackApiResponse> call, Throwable t) {
-
+                //in case of any changes
+                //submitting the items to adapter
+                adapter.submitList(items);
             }
         });
+
+        //setting the adapter
+        recyclerView.setAdapter(adapter);
     }
 }
