@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +18,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     //getting recyclerview
     private RecyclerView recyclerView;
+    TextView t;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
