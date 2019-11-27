@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     TextView t;
     TextView j;
+    TextView n;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
